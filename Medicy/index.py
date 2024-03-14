@@ -1,58 +1,48 @@
-from tkinter import *
-from ventana import Ventana
-from registro import Registrarse
+import tkinter as tk
+from PIL import Image, ImageTk
+from login import Login
+from register import Register
+from solicitud_turnos import SolicitudTurnos
 from lista_turnos import MostrarTurnos
 
-
-class VentanaPrincipal():
-    
+class App(tk.Tk):
     def __init__(self):
+        super().__init__()
+        self.title('Medicy')
+        self.geometry('700x600')
+        self.resizable(False, False)
+
+        # Persistent background or elements
+        self.configure(bg="#DDF7F5")
         
-        self.ventana1= Ventana.fondo()
-
-        self.framel = LabelFrame(self.ventana1, text="Login", width=300, height=50, padx=50, pady=10)
-        self.framel.config(bg="#DDF7F5")
-        self.framel.pack()
-
-        self.userLabel = Label(self.framel, text="Usuario: ")
-        self.userLabel.grid(row=1, column=0, sticky="w")
-        self.userLabel.config(fg="black", bg="white")
-        self.userTexto = Entry(self.framel)
-        self.userTexto.grid(row=1, column=1, padx=10, pady=10)
-        self.userTexto.config(fg="black", bg="white")
-
-        self.passLabel = Label(self.framel, text="Contraseña: ")
-        self.passLabel.grid(row=2, column=0, sticky="w")
-        self.passLabel.config(fg="black", bg="white")
-        self.passTexto = Entry(self.framel)
-        self.passTexto.grid(row=2, column=1, padx=50, pady=10)
-        self.passTexto.config(fg="black", bg="white")
-
-        self.btn_login()
-        self.btn_registro()
+        # Frame for navigable content
+        self.content_frame = tk.Frame(self, bg="#DDF7F5")
+        # Load and place a persistent image
+        self.place_persistent_image()
+        self.content_frame.pack(fill="both", expand=True)
         
-              
-        self.ventana1.mainloop()
 
-    def inicio(self):
-        self.ventana1.destroy() 
-        MostrarTurnos()
+        self.frames = {}
+        for F in (Login, Register, SolicitudTurnos, MostrarTurnos):
+            frame = F(parent=self.content_frame, controller=self)
+            self.frames[F.__name__] = frame
+            self.content_frame.grid_rowconfigure(0, weight=1)
+            self.content_frame.grid_columnconfigure(0, weight=1)
+            frame.grid(row=0, column=0, sticky="nsew")
 
-    def abrir_registro(self):
-        self.ventana1.destroy() 
-        Registrarse()
-        
-   
-    def btn_login(self):
-        self.boton_login = Button(self.framel, text="Iniciar Sesión ", command=self.inicio)
-        self.boton_login.config(bg="#C1E2F3")
-        self.boton_login.grid(row=3, column=1)
-
-    def btn_registro(self):
-        self.boton_registro=Button(self.framel, text="Registrarse ", command=self.abrir_registro)
-        self.boton_registro.config(bg="#F9DBED")
-        self.boton_registro.grid(row=5,column=1, padx=10, pady=10)
-
+        self.show_frame("Login")
     
-App1 = VentanaPrincipal()
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
+    
+    def place_persistent_image(self):
+        image = Image.open("img/salud.png").resize((100, 100))
+        photo_image = ImageTk.PhotoImage(image)
+        self.label_image = tk.Label(self, image=photo_image, bg="#DDF7F5")
+        self.label_image.image = photo_image 
+        self.label_image.pack(side="top") 
 
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

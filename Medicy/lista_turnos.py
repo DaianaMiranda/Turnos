@@ -1,61 +1,50 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
-from ventana import Ventana
-from solicitud_turnos import SolicitudTurnos
-# from medico import Medico
+# Assuming Medico class is in medico.py and has been updated as described
+from medico import Medico
 
-class MostrarTurnos:
-    def __init__(self):
-        self.ventana1 = Ventana.fondo()
-        self.cargar_datos_base()
-        self.cuadro_turnos()
+class MostrarTurnos(tk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.config(bg="#DDF7F5")
+        self.medicos = Medico.obtener_medicos()  # Fetching medicos
+        self.create_widgets()
 
-    def cargar_datos_base(self):
-        pass
-        # self.medicos = Medico.obtener_medicos()
+    def create_widgets(self):
+        self.create_treeview()
+        self.create_buttons()
 
-    def cuadro_turnos(self):
-        self.grid = ttk.Treeview(self.ventana1, columns=("col1", "col2", "col3"))
+    def create_treeview(self):
+        # Set up the treeview
+        self.treeview = ttk.Treeview(self, columns=("col1", "col2", "col3"))
+        self.treeview.column("#0", width=100, anchor=tk.CENTER)
+        self.treeview.column("col1", width=80, anchor=tk.CENTER)
+        self.treeview.column("col2", width=120, anchor=tk.CENTER)
+        self.treeview.column("col3", width=50, anchor=tk.CENTER)
 
-        self.grid.column("#0", width=100, anchor=CENTER) 
-        self.grid.column("col1", width=80, anchor=CENTER)
-        self.grid.column("col2", width=50, anchor=CENTER)
-        self.grid.column("col3", width=50, anchor=CENTER)
+        self.treeview.heading("#0", text="Nombre y Apellido", anchor=tk.CENTER)
+        self.treeview.heading("col1", text="Especialidad", anchor=tk.CENTER)
+        self.treeview.heading("col2", text="Fecha", anchor=tk.CENTER)
+        self.treeview.heading("col3", text="Hora", anchor=tk.CENTER)
 
-        self.grid.heading("#0", text="Nombre y Apellido", anchor=CENTER)
-        self.grid.heading("col1", text="Especialidad", anchor=CENTER)
-        self.grid.heading("col2", text="Fecha", anchor=CENTER)
-        self.grid.heading("col3", text="Hora", anchor=CENTER)
+        for medico in self.medicos:
+            horarios = medico.obtener_horarios_medico()
+            for horario in horarios:
+                self.treeview.insert("", "end", text=medico.nombre_apellido, values=(medico.especialidad, horario[0], horario[1]))
 
-        # for medico in self.medicos:
-        #     horarios = medico.obtener_horarios_medico()
-        #     for fecha, hora in horarios:
-        #         self.grid.insert("", "end", text=medico.nombre_apellido, values=(medico.especialidad, fecha, hora))
+        self.treeview.pack(expand=True, fill=tk.BOTH)
 
-        self.grid.place(x=150, y=250, width=400, height=300)
+    def create_buttons(self):
+        self.boton_solicitar_turno = tk.Button(self, text="Solicitar Turno", bg="pink", command=self.solicitar_turno)
+        self.boton_solicitar_turno.pack(side=tk.BOTTOM, pady=10)
 
-        self.boton_solicitar_turno = Button(self.ventana1, text="Solicitar Turno", command=self.solicitar_turno, bg="pink")
-        self.boton_solicitar_turno.place(x=400, y=520)
-
-        self.boton_salir = Button(self.ventana1, text="Salir", command=self.salir, bg="pink")
-        self.boton_salir.place(x=350, y=520, )
+        self.boton_salir = tk.Button(self, text="Salir", bg="pink", command=self.salir)
+        self.boton_salir.pack(side=tk.BOTTOM, pady=10)
 
     def solicitar_turno(self):
-        self.ventana1.destroy()
-        SolicitudTurnos()
+        self.controller.show_frame("SolicitudTurnos")
+
 
     def salir(self):
-        self.ventana1.destroy()
-
-
-
-
-
-
-
-
-       
-        
-
-
-
+        self.controller.show_frame("Login")
