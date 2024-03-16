@@ -1,0 +1,10 @@
+Especialidad: Pediatría, Nombre del Medico: Carlos López, Fecha: 07/04/2024, Hora: 8:00
+Especialidad: Clínico, Nombre del Medico: Juan Pérez, Fecha: 03/04/2024, Hora: 8:00
+Especialidad: Pediatría, Nombre del Medico: Juan Pérez, Fecha: 07/04/2024, Hora: 8:00
+Especialidad: Pediatría, Nombre del Medico: Juan Pérez, Fecha: 07/04/2024, Hora: 8:00
+Especialidad: Pediatría, Nombre del Medico: Juan Pérez, Fecha: 07/04/2024, Hora: 8:00
+Especialidad: Ginecología, Nombre del Medico: María García, Fecha: 10/04/2024, Hora: 10:00
+Especialidad: Pediatría, Nombre del Medico: Carlos López, Fecha: 07/04/2024, Hora: 10:00
+Especialidad: Pediatría, Nombre del Medico: Ana Martínez, Fecha: 07/04/2024, Hora: 10:00
+Especialidad: Pediatría, Nombre del Medico: , Fecha: 10/04/2024, Hora: 10:00
+Especialidad: Pediatría, Nombre del Medico: Ana Martínez, 

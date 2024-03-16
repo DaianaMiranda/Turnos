@@ -1,8 +1,8 @@
 from conexion import ConexionBD 
-import mysql.connector
+# import mysql.connector
 
 class Usuario:
-    def __init__(self, nombre, contra, apellido=None, telefono=None, correo=None):
+    def __init__(self, nombre, contra, apellido="", telefono="", correo=""):
         self.nombre = nombre
         self.contra = contra
         self.apellido = apellido
@@ -11,7 +11,8 @@ class Usuario:
         self.conectado = False
 
     @staticmethod
-    def crear_usuario(nombre, contra, apellido=None, telefono=None, correo=None):
+    def crear_usuario(nombre, contra, apellido="", telefono="", correo=""):
+        
         with ConexionBD() as conexion:
             cursor = conexion.con.cursor()
             query = """INSERT INTO usuarios (nombre, apellido, telefono, correo_electronico, contraseña) 

@@ -1,46 +1,27 @@
-from conexion import ConexionBD  # Ensure you have the updated ConexionBD class that supports context management
+from conexion import ConexionBD
 
-class Medico:
-    def __init__(self, id_med='', especialidad='', nombre_apellido=''):
+
+class DatosTurnos:
+    def __init__(self, id_med='', nombre_apellido='', especialidad='', fecha ='', hora=''):
         self.id_med = id_med
-        self.especialidad = especialidad
         self.nombre_apellido = nombre_apellido
+        self.especialidad = especialidad
+        self.fecha = fecha
+        self.hora = hora
+
 
     @staticmethod
-    def obtener_medicos():
-        medicos = []
+    def obtener_datos_turnos():
+       
         with ConexionBD() as conexion:
             cursor = conexion.con.cursor()
-            query = "SELECT id_med, especialidad, nombre_apellido FROM medicos"
+            query = "SELECT id_med, nombre_apellido, especialidad, fecha, hora FROM turnos"
             cursor.execute(query)
-            for id_med, especialidad, nombre_apellido in cursor.fetchall():
-                medicos.append(Medico(id_med, especialidad, nombre_apellido))
-        return medicos
-
-    def obtener_horarios_medico(self):
-        horarios = []
-        with ConexionBD() as conexion:
-            cursor = conexion.con.cursor()
-            query = "SELECT fecha, hora FROM horarios WHERE id_med = %s"
-            cursor.execute(query, (self.id_med,))
-            horarios = cursor.fetchall()
-        return horarios
-
-    @staticmethod
-    def agregar_horario_turno(id_med, fecha, hora):
-        with ConexionBD() as conexion:
-            cursor = conexion.con.cursor()
-            query = "INSERT INTO horarios (fecha, hora, id_med) VALUES (%s, %s, %s)"
-            cursor.execute(query, (fecha, hora, id_med))
+            turnos = cursor.fetchall()
             conexion.con.commit()
+            
+            return turnos
 
-# Usage example for obtaining medicos
-# medicos = Medico.obtener_medicos()
-# for medico in medicos:
-#     print(f"Medico: {medico.nombre_apellido}, Especialidad: {medico.especialidad}")
 
-# Usage example for obtaining horarios for a specific medico
-# if medicos:
-#     horarios = medicos[0].obtener_horarios_medico()
-#     for fecha, hora in horarios:
-#         print(f"Fecha: {fecha}, Hora: {hora}")
+
+
