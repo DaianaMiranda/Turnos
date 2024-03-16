@@ -7,7 +7,7 @@ class ConexionBD:
             self.con = mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="",
+                password="root",
                 database=""
             )
             if self.con.is_connected():
@@ -32,33 +32,19 @@ class ConexionBD:
                 telefono VARCHAR(255) NOT NULL
             )
           """)
+        
         self.cursor.execute("""
              CREATE TABLE IF NOT EXISTS turnos (
                 id_med INT,
                 nombre_medico VARCHAR(255),
                 especialidad VARCHAR(255),
                 fecha DATE,
-                hora TIME
+                hora TIME,
+                id_usuario INT,
+                FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
             )
         """)                                 
 
-        # self.cursor.execute("""
-        #     CREATE TABLE IF NOT EXISTS medicos (
-        #         id_med INT AUTO_INCREMENT PRIMARY KEY,
-        #         especialidad VARCHAR(45),
-        #         nombre_apellido VARCHAR(45)
-        #     )
-        # """)  
-        # self.cursor.execute("""
-        #     CREATE TABLE IF NOT EXISTS turnos (
-        #         fecha DATE,
-        #         hora TIME,
-        #         id_med INT,
-        #         id_usuario INT,          
-        #         FOREIGN KEY(id_med) REFERENCES medicos(id_med),
-        #         FOREIGN KEY(id_usuario) REFERENCES usuarios(id_usuario)            
-        #     )
-        # """)
 
         # Add initial data if needed
         self.initialize_data()

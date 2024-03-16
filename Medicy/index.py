@@ -4,6 +4,7 @@ from login import Login
 from register import Register
 from solicitud_turnos import SolicitudTurnos
 from lista_turnos import MostrarTurnos
+from medico import DatosTurnos
 
 class App(tk.Tk):
     def __init__(self):
@@ -11,7 +12,8 @@ class App(tk.Tk):
         self.title('Medicy')
         self.geometry('700x600')
         self.resizable(False, False)
-
+        self.id_usuario = None
+        self.datos_turnos = DatosTurnos()
         # Persistent background or elements
         self.configure(bg="#DDF7F5")
         
@@ -34,6 +36,8 @@ class App(tk.Tk):
     
     def show_frame(self, page_name):
         frame = self.frames[page_name]
+        if page_name == "MostrarTurnos" and self.id_usuario is not None:
+            frame.cargar_turnos_usuario()  # Call to load user-specific turnos
         frame.tkraise()
     
     def place_persistent_image(self):

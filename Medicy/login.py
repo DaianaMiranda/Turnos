@@ -37,7 +37,10 @@ class Login(tk.Frame):
         username = self.userTexto.get()
         password = self.passTexto.get()
         
-        if Usuario.verificar_credenciales(username, password):
+        authenticated, user_id = Usuario.verificar_credenciales(username, password)
+        
+        if authenticated:
+            self.controller.id_usuario = user_id
             self.controller.show_frame("MostrarTurnos")
         else:
             messagebox.showerror("Error de inicio de sesión", "Usuario o contraseña incorrecta")

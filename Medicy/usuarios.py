@@ -39,7 +39,16 @@ class Usuario:
             cursor = conexion.con.cursor()
             cursor.execute("SELECT * FROM usuarios WHERE nombre = %s AND contraseña = %s", (nombre, contraseña))
             result = cursor.fetchone()
-            return result is not None
+            user_id = None  # Fetch the actual user ID from the database based on credentials
+            is_authenticated = False  # Result of your credential check
+            
+            credentials_are_valid = result is not None
+
+            if credentials_are_valid:  # You'll have your logic to determine this
+                is_authenticated = True
+                user_id = result[0]
+            
+            return is_authenticated, user_id
         
     def desconectar(self):
         if self.conectado:
