@@ -40,6 +40,15 @@ class App(tk.Tk):
             if self.id_usuario is not None:
                 frame.reset_state()
                 frame.cargar_turnos_usuario()
+        elif page_name == "SolicitudTurnos":
+            turnos_disponibles = self.datos_turnos.verificar_turnos_disponibles()
+            if not turnos_disponibles:
+                tk.messagebox.showerror("Error", "No hay turnos disponibles")
+                return
+            
+
+            
+            
         frame.tkraise()
     
     def place_persistent_image(self):

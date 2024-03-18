@@ -151,3 +151,15 @@ class DatosTurnos:
             """
             cursor.execute(query, (id_usuario,))
             return cursor.fetchall()
+        
+    @staticmethod
+    def verificar_turnos_disponibles():
+        with ConexionBD() as conexion:
+            cursor = conexion.con.cursor()
+            query = """
+            SELECT COUNT(*) 
+            FROM turnos
+            WHERE id_usuario IS NULL;
+            """
+            cursor.execute(query)
+            return cursor.fetchone()[0] > 0
