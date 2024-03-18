@@ -30,7 +30,7 @@ class Login(tk.Frame):
         boton_login = tk.Button(framel, text="Iniciar Sesión", bg="#C1E2F3", command=self.login)
         boton_login.grid(row=2, column=1, pady=10)
 
-        boton_registro = tk.Button(framel, text="Registrarse", bg="#F9DBED", command=lambda: controller.show_frame("Register"))
+        boton_registro = tk.Button(framel, text="Registrarse", bg="#F9DBED", command=lambda: controller.show_frame("Registro"))
         boton_registro.grid(row=6, column=1, pady=10)
 
     def login(self):

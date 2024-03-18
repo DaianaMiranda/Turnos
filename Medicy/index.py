@@ -36,8 +36,10 @@ class App(tk.Tk):
     
     def show_frame(self, page_name):
         frame = self.frames[page_name]
-        if page_name == "MostrarTurnos" and self.id_usuario is not None:
-            frame.cargar_turnos_usuario()  # Call to load user-specific turnos
+        if page_name == "MostrarTurnos":
+            if self.id_usuario is not None:
+                frame.reset_state()
+                frame.cargar_turnos_usuario()
         frame.tkraise()
     
     def place_persistent_image(self):

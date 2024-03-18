@@ -1,27 +1,34 @@
 import mysql.connector
 from mysql.connector import Error
 
+# Define una clase para manejar la conexión a la base de datos
 class ConexionBD:
     def __init__(self):
         try:
+            #  Se intenta establecer la conexion con MySQL
             self.con = mysql.connector.connect(
                 host="localhost",
                 user="root",
                 password="root",
                 database=""
             )
+            
             if self.con.is_connected():
+                # Crea un cursor para ejecutar consultas SQL
                 self.cursor = self.con.cursor()
+                # Configura la base de datos y las tablas
                 self.setup_database()
+        # Captura cualquier error que pueda ocurrir durante la conexion
         except Error as e:
             print("Error while connecting to MySQL", e)
 
+    # Metodo para configurar la base de datos y las tablas
     def setup_database(self):
-        # Create database if not exists
+      
         self.cursor.execute("CREATE DATABASE IF NOT EXISTS bd_medicy")
         self.cursor.execute("USE bd_medicy")
 
-        # Create tables if not exist
+       
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS usuarios (
                 id_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,6 +39,7 @@ class ConexionBD:
                 telefono VARCHAR(255) NOT NULL
             )
           """)
+        
         
         self.cursor.execute("""
              CREATE TABLE IF NOT EXISTS turnos (
@@ -46,13 +54,19 @@ class ConexionBD:
         """)                                 
 
 
-        # Add initial data if needed
+        # Agrega datos iniciales si es necesario
         self.initialize_data()
 
+        # Confirmamos los cambios 
         self.con.commit()
 
+    # Metodo para agregar datos iniciales a la tabla turnos
     def initialize_data(self):
-        self.cursor.execute("""
+        # Verifica si la tabla turnos esta vacia
+        self.cursor.execute("SELECT COUNT(*) FROM turnos")
+        # Si la tabla esta vacia, insertamos datos iniciales
+        if self.cursor.fetchone()[0] == 0:  
+            self.cursor.execute("""
             INSERT INTO turnos (id_med, nombre_medico, especialidad, fecha, hora) VALUES
             (1, 'Juan Pérez', 'Pediatría', '2024-03-15', '10:00'),
             (1, 'Juan Pérez', 'Pediatría', '2024-03-16', '14:30'),
@@ -71,55 +85,29 @@ class ConexionBD:
                             
         """)
 
-
-    # def initialize_data(self):
-    #     self.cursor.execute("SELECT COUNT(*) FROM medicos")
-    #     if self.cursor.fetchone()[0] == 0:
-    #         # If no records exist, insert the initial data
-    #         self.cursor.execute("""
-    #             INSERT INTO medicos (nombre_apellido, especialidad) VALUES
-    #             (('Juan Pérez', 'Pediatría'), ('María González', 'Pediatría'), ('Pablo Martínez', 'Pediatría')),
-    #             (('Laura Sánchez', 'Ginecología'), ('Ana Rodríguez', 'Ginecología'), ('Carlos Fernández', 'Ginecología')),
-    #             (('Roberto García', 'Clínico'), ('Marta López', 'Clínico'), ('Javier Ruiz', 'Clínico')),
-    #             (('María Fernández', 'Dermatología'), ('José Martínez', 'Dermatología'), ('Elena Gómez', 'Dermatología')),
-    #             (('David Pérez', 'Oftalmología'), ('Sandra Rodríguez', 'Oftalmología'), ('Francisco Ruiz', 'Oftalmología'));
-    #         """)
-    #         self.cursor.execute("""
-    #             INSERT INTO turnos (fecha, hora, id_med) VALUES
-    #             ('2024-03-15', '10:00', 1),
-    #             ('2024-03-16', '14:30', 1),
-    #             ('2024-03-17', '09:00', 3),
-    #             ('2024-03-18', '11:15', 4),
-    #             ('2024-03-19', '16:45', 2),
-    #             ('2024-03-20', '08:30', 1),
-    #             ('2024-03-21', '13:00', 2),
-    #             ('2024-03-22', '15:45', 2),
-    #             ('2024-03-23', '12:30', 4),
-    #             ('2024-03-24', '17:00', 3),
-    #             ('2024-03-21', '13:00', 4),
-    #             ('2024-03-22', '15:45', 3),
-    #             ('2024-03-23', '12:30', 5),
-    #             ('2024-03-24', '17:00', 1)
-    #         """)
-
+    # Metodo para ejecutar consultas SELECT
     def query(self, sql, params=None):
         with self.con.cursor() as cursor:
             cursor.execute(sql, params or ())
             return cursor.fetchall()
 
-    def execute(self, sql, params=None):
+    # Metodo para ejecutar consultas que modifican la base de datos
+    def ejecutar(self, sql, params=None):
         with self.con.cursor() as cursor:
             cursor.execute(sql, params or ())
+            
             self.con.commit()
 
+    # Metodo llamado cuando se utiliza la instancia de la clase en un contexto "with"
     def __enter__(self):
         return self
 
+    # Metodo llamado al salir del contexto "with"
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.cerrar_conexion()
 
+    # Metodo para cerrar la conexión con la base de datos
     def cerrar_conexion(self):
         if self.con.is_connected():
             self.cursor.close()
             self.con.close()
-

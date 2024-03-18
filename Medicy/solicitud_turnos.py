@@ -1,7 +1,7 @@
 
 import tkinter as tk
 from tkinter import ttk, messagebox
-from medico import DatosTurnos
+from turnos import DatosTurnos
 
 class SolicitudTurnos(tk.Frame):
 
@@ -127,7 +127,7 @@ class SolicitudTurnos(tk.Frame):
         fechas = sorted(set([fecha for fecha, _ in disponibilidad]))
         self.fechas['values'] = fechas
         if fechas:
-            self.fechas.set(fechas[0])  # Optionally set to first available date
+            self.fechas.set(fechas[0]) 
             horas = [hora for fecha, hora in disponibilidad if fecha == fechas[0]]
             self.horarios['values'] = horas
 
