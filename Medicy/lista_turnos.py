@@ -38,7 +38,6 @@ class MostrarTurnos(tk.Frame):
         id_usuario = self.controller.id_usuario
         if id_usuario is not None:
             turnos = self.controller.datos_turnos.obtener_turnos_usuario(id_usuario)
-            print(f"turnos: {turnos}")
             for turno in turnos:
 
                 id_med, nombre_medico, especialidad, fecha, hora = turno
